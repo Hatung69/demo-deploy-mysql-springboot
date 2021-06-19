@@ -49,9 +49,13 @@ public class RestControllerZZ {
 	}
 
 	// Delete Student
-	@DeleteMapping("api/v1/students/id")
-	public ResponseEntity<Student> deleteStudent(@PathVariable(name = "id") int id) {
-		studentRepo.deleteById(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	@DeleteMapping("api/v1/students/{id}")
+	public ResponseEntity<?> deleteStudent(@PathVariable(name = "id") int id) {
+		Student student = studentRepo.findById(id).orElse(null);
+		if (student != null) {
+			studentRepo.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }
